@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ This script analyzes tweets stored in a csv file and prints out statistics
-    about them """
+    about them. """
 
 import csv
 import argparse
