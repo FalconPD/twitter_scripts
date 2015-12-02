@@ -17,7 +17,7 @@ parser.add_argument("-t", "--time", help=("analzye tweets from this time "
                     default="day", choices=['hour', 'day', 'week'])
 parser.add_argument("-g", "--hashtags", help=("keep stats on these hashtags "
                                               "(default: %(default)s)"),
-                    default="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabulousFalcons")
+                    default="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabulousFalcons,#There'sNoPlaceLikeOakTree")
 
 # Handle options stuff
 args = parser.parse_args()

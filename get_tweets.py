@@ -17,7 +17,7 @@ parser.add_argument("-f", "--file", help=("append tweets to FILE. If it does "
 parser.add_argument("-g", "--hashtags", help=("collect tweets with these "
 					      "hashtags (default: "
 					      "%(default)s)"),
-		    default="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabulousFalcons")
+		    default="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabulousFalcons,#There'sNoPlaceLikeOakTree")
 parser.add_argument("-a", "--access_tokens_file", help=("get access tokens "
 						   "from this file. "
 						   "(default: %(default)s)"),
@@ -69,8 +69,12 @@ tweets.reverse() # Make oldest tweet first and the newest tweet last
 csvfile = open(args.file, 'a', newline='')
 csv_output = csv.writer(csvfile, dialect='excel')
 for tweet in tweets:
-    print(tweet.id, tweet.created_at, tweet.user.screen_name, tweet.text,
+    print(tweet.id, tweet.created_at, #FIXME This unicode stripping is awful
+          tweet.user.screen_name.encode('ascii', 'ignore').decode('ascii'),
+          tweet.text.encode('ascii', 'ignore').decode('ascii'),
           tweet.favorite_count, tweet.retweet_count)
-    csv_output.writerow([tweet.id, tweet.created_at, tweet.user.screen_name,
-                         tweet.text, tweet.favorite_count, tweet.retweet_count])
+    csv_output.writerow([tweet.id, tweet.created_at,
+                        tweet.user.screen_name.encode('ascii', 'ignore').decode('ascii'),
+                        tweet.text.encode('ascii', 'ignore').decode('ascii'),
+                        tweet.favorite_count, tweet.retweet_count])
 csvfile.close()
