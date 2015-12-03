@@ -18,6 +18,9 @@ parser.add_argument("-t", "--time", help=("analzye tweets from this time "
 parser.add_argument("-g", "--hashtags", help=("keep stats on these hashtags "
                                               "(default: %(default)s)"),
                     default="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabulousFalcons,#There'sNoPlaceLikeOakTree")
+parser.add_argument("-p", "--png", help=("output png pie chart to PNG "
+                                         "(default: %(default)s)"),
+                    default="/var/www/html/hashtag_pie_chart.png")
 
 # Handle options stuff
 args = parser.parse_args()
@@ -75,18 +78,17 @@ except FileNotFoundError:
 csvfile.close()
 
 # Generate output
-
 # Make a pie chart showing the amount of tweets for each hashtag, pull out the
 # hashtags that don't have any tweets
 sizes = list()
 labels = list()
-for hashtag in hashtags:
-    if hashtags[hashtag] != 0:
-        sizes.append(hashtags[hashtag])
-        labels.append(hashtag)
-plt.pie(sizes, labels=labels, shadow=True, startangle=90)
+for key, value in sorted(hashtags.items()):
+    if value != 0:
+        sizes.append(value)
+        labels.append(key)
+plt.pie(sizes, labels=labels, shadow=True, startangle=90, autopct='%1.0f%%')
 plt.axis('equal')
-plt.savefig("test.png")
+plt.savefig(args.png, bbox_inches='tight')
 print("Total Tweets:", total_tweets)
 print("Most Retweeted:", most_retweeted)
 print("Most Favorited:", most_favorited)
