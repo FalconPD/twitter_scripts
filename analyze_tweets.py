@@ -18,9 +18,15 @@ parser.add_argument("-t", "--time", help=("analzye tweets from this time "
 parser.add_argument("-g", "--hashtags", help=("keep stats on these hashtags "
                                               "(default: %(default)s)"),
                     default="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabulousFalcons,#There'sNoPlaceLikeOakTree")
-parser.add_argument("-p", "--png", help=("output png pie chart to PNG "
-                                         "(default: %(default)s)"),
-                    default="/var/www/html/hashtag_pie_chart.png")
+parser.add_argument("-p", "--pieoutput", help=("output pie chart to PIEOUTPUT "
+                                               "(default: %(default)s)"),
+                    default="/home/ryan/falconPD_website/assets/pie.svg")
+parser.add_argument("-m", "--template", help=("location of markdown template "
+                                              "default: %(default)s"),
+                    default="04-Daily Summary.md.template")
+parser.add_argument("-o", "--mdoutput", help=("output markdown to MDOUTPUT "
+                                              "(default: %(default)s)"),
+                    default="/home/ryan/falconPD_website/_features/04-Daily Summary.md")
 
 # Handle options stuff
 args = parser.parse_args()
@@ -78,6 +84,7 @@ except FileNotFoundError:
 csvfile.close()
 
 # Generate output
+
 # Make a pie chart showing the amount of tweets for each hashtag, pull out the
 # hashtags that don't have any tweets
 sizes = list()
@@ -88,7 +95,23 @@ for key, value in sorted(hashtags.items()):
         labels.append(key)
 plt.pie(sizes, labels=labels, shadow=True, startangle=90, autopct='%1.0f%%')
 plt.axis('equal')
-plt.savefig(args.png, bbox_inches='tight')
+plt.savefig(args.pieoutput, bbox_inches='tight')
+
+# Read from the template, replace the tags with our variables
 print("Total Tweets:", total_tweets)
 print("Most Retweeted:", most_retweeted)
 print("Most Favorited:", most_favorited)
+f = open(args.template, 'r') 
+filedata = f.read()
+f.close()
+filedata = filedata.replace("<MOSTRETWEETED>","@" + most_retweeted)
+filedata = filedata.replace("<MOSTFAVORITED>","@" + most_favorited)
+filedata = filedata.replace("<DATERUN>", datetime.datetime.today().strftime("%A %B %m, %Y"))
+text_hashtags = ""
+for hashtag in args.hashtags.split(','):
+    text_hashtags += hashtag + ", "
+text_hashtags =  text_hashtags[:-2] # Trim off the last ", "
+filedata = filedata.replace("<HASHTAGS>", text_hashtags)
+f = open(args.mdoutput,'w')
+f.write(filedata)
+f.close()
