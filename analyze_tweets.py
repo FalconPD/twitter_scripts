@@ -106,7 +106,7 @@ filedata = f.read()
 f.close()
 filedata = filedata.replace("<MOSTRETWEETED>","@" + most_retweeted)
 filedata = filedata.replace("<MOSTFAVORITED>","@" + most_favorited)
-filedata = filedata.replace("<DATERUN>", datetime.datetime.today().strftime("%A %B %m, %Y"))
+filedata = filedata.replace("<DATERUN>", datetime.datetime.today().strftime("%A %B %d, %Y"))
 text_hashtags = ""
 for hashtag in args.hashtags.split(','):
     text_hashtags += hashtag + ", "
