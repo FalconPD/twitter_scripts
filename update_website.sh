@@ -1,5 +1,6 @@
 #!/bin/bash
 
+PATH=$PATH:/usr/local/bin
 HASHTAGS="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabulousFalcons,#There'sNoPlaceLikeOakTree"
 
 cd /home/ryan/twitter_scripts

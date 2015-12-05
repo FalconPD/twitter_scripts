@@ -23,7 +23,7 @@ parser.add_argument("-p", "--pieoutput", help=("output pie chart to PIEOUTPUT "
                     default="/home/ryan/falconPD_website/assets/pie.svg")
 parser.add_argument("-m", "--template", help=("location of markdown template "
                                               "default: %(default)s"),
-                    default="04-Daily Summary.md.template")
+                    default="templates/04-Daily Summary.md.template")
 parser.add_argument("-o", "--mdoutput", help=("output markdown to MDOUTPUT "
                                               "(default: %(default)s)"),
                     default="/home/ryan/falconPD_website/_features/04-Daily Summary.md")
@@ -104,6 +104,7 @@ print("Most Favorited:", most_favorited)
 f = open(args.template, 'r') 
 filedata = f.read()
 f.close()
+filedata = filedata.replace("<TOTALTWEETS>", str(total_tweets))
 filedata = filedata.replace("<MOSTRETWEETED>","@" + most_retweeted)
 filedata = filedata.replace("<MOSTFAVORITED>","@" + most_favorited)
 filedata = filedata.replace("<DATERUN>", datetime.datetime.today().strftime("%A %B %d, %Y"))
