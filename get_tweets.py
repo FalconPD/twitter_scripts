@@ -22,10 +22,15 @@ parser.add_argument("-a", "--access_tokens_file", help=("get access tokens "
 						   "from this file. "
 						   "(default: %(default)s)"),
 		    default="access_tokens.json")
+parser.add_argument("-b", "--blacklist_file", help=("ignore tweets from"
+                                                    " these handles. "
+                                                    "(default: %(default)s)"),
+                    default="blacklist.json")
 
 args = parser.parse_args()
 print("Writing tweets to:", args.file)
 print("Getting access_tokens from:", args.access_tokens_file)
+print("Using blacklist file:", args.blacklist_file)
 search_string=str()
 for hashtag in args.hashtags.split(','):
 	search_string += hashtag + " OR "
@@ -33,12 +38,22 @@ search_string = search_string[:-4] #Trim off the last " OR "
 print("Using search string:", search_string)
 
 try:
-	access_tokens_file = open(args.access_tokens_file, 'r')
-	access_tokens = json.load(access_tokens_file)
-	access_tokens_file.close()
+    access_tokens_file = open(args.access_tokens_file, 'r')
+    access_tokens = json.load(access_tokens_file)
+    access_tokens_file.close()
 except:
-	print("Can't open access tokens file.")
-	sys.exit(1)
+    print("Can't open access tokens file.")
+    sys.exit(1)
+
+try:
+    blacklist_file = open(args.blacklist_file, 'r')
+    blacklist = json.load(blacklist_file)
+    blacklist_file.close()
+except:
+    print("Can't open blacklist file.")
+    sys.exit(1)
+
+print("Ignoring tweets from:", ", ".join(blacklist))
 
 auth = tweepy.OAuthHandler(access_tokens['consumer_key'], access_tokens['consumer_secret'])
 auth.set_access_token(access_tokens['access_token'], access_tokens['access_token_secret'])
@@ -69,12 +84,15 @@ tweets.reverse() # Make oldest tweet first and the newest tweet last
 csvfile = open(args.file, 'a', newline='')
 csv_output = csv.writer(csvfile, dialect='excel')
 for tweet in tweets:
-    print(tweet.id, tweet.created_at, #FIXME This unicode stripping is awful
-          tweet.user.screen_name.encode('ascii', 'ignore').decode('ascii'),
-          tweet.text.encode('ascii', 'ignore').decode('ascii'),
-          tweet.favorite_count, tweet.retweet_count)
-    csv_output.writerow([tweet.id, tweet.created_at,
-                        tweet.user.screen_name.encode('ascii', 'ignore').decode('ascii'),
-                        tweet.text.encode('ascii', 'ignore').decode('ascii'),
-                        tweet.favorite_count, tweet.retweet_count])
+    if (tweet.user.screen_name in blacklist):
+        print("Ignoring tweet from", tweet.user.screen_name)
+    else:
+        print(tweet.id, tweet.created_at, #FIXME This unicode stripping is awful
+            tweet.user.screen_name.encode('ascii', 'ignore').decode('ascii'),
+            tweet.text.encode('ascii', 'ignore').decode('ascii'),
+            tweet.favorite_count, tweet.retweet_count)
+        csv_output.writerow([tweet.id, tweet.created_at,
+            tweet.user.screen_name.encode('ascii', 'ignore').decode('ascii'),
+            tweet.text.encode('ascii', 'ignore').decode('ascii'),
+            tweet.favorite_count, tweet.retweet_count])
 csvfile.close()
