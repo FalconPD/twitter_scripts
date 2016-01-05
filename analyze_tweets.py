@@ -63,21 +63,17 @@ try:
         this_datetime = datetime.datetime.strptime(row[1], "%Y-%m-%d %H:%M:%S")
         if this_datetime > start_datetime:
             total_tweets += 1
+            if (row[5] != ""):
+                if row[5] in retweets:
+                    retweets[row[5]] += 1
+                else:
+                    retweets[row[5]] = 1
             favorites[row[2]] = favorites.get(row[2], 0) + int(row[4])
-            retweets[row[2]] = retweets.get(row[2], 0) + int(row[5])
             for hashtag in hashtags:
                 if hashtag.lower() in row[3].lower():
                     hashtags[hashtag] += 1
-    count = 0
-    for name in retweets:
-        if retweets[name] > count:
-            count = retweets[name]
-            most_retweeted = name
-    count = 0
-    for name in favorites:
-        if favorites[name] > count:
-            count = favorites[name]
-            most_favorited = name
+    most_retweeted = max(retweets, key=retweets.get)
+    most_favorited = max(favorites, key=favorites.get)
 except FileNotFoundError:
     print(args.file, "not found.")
     sys.exit(1)

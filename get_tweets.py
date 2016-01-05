@@ -2,6 +2,10 @@
 """ This script downloads tweets that match a certain search expression to a
     csv file """
 
+#FIXME This unicode stripping is awful
+def stripUnicode(str):
+    return str.encode('ascii', 'ignore').decode('ascii')
+
 import tweepy
 import csv
 import json
@@ -71,7 +75,7 @@ except FileNotFoundError:
     csvfile = open(args.file, 'a', newline='')
     csv_output = csv.writer(csvfile, dialect='excel')
     csv_output.writerow(["id", "created_at (UTC)", "screen_name", "text",
-                         "favorite_count", "retweet_count"])
+                         "favorite_count", "original screen_name"])
 csvfile.close()
 
 print("Getting all tweets since id", last_id)
@@ -87,12 +91,12 @@ for tweet in tweets:
     if (tweet.user.screen_name in blacklist):
         print("Ignoring tweet from", tweet.user.screen_name)
     else:
-        print(tweet.id, tweet.created_at, #FIXME This unicode stripping is awful
-            tweet.user.screen_name.encode('ascii', 'ignore').decode('ascii'),
-            tweet.text.encode('ascii', 'ignore').decode('ascii'),
-            tweet.favorite_count, tweet.retweet_count)
-        csv_output.writerow([tweet.id, tweet.created_at,
-            tweet.user.screen_name.encode('ascii', 'ignore').decode('ascii'),
-            tweet.text.encode('ascii', 'ignore').decode('ascii'),
-            tweet.favorite_count, tweet.retweet_count])
+        if hasattr(tweet, 'retweeted_status'):
+            original_screen_name = stripUnicode(tweet.retweeted_status.user.screen_name)
+        else:
+            original_screen_name = ""
+        screen_name = stripUnicode(tweet.user.screen_name)
+        text = stripUnicode(tweet.text)
+        print(tweet.id, tweet.created_at, screen_name, text, tweet.favorite_count, original_screen_name) 
+        csv_output.writerow([tweet.id, tweet.created_at, screen_name, text, tweet.favorite_count, original_screen_name])
 csvfile.close()
