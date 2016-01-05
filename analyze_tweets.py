@@ -72,8 +72,10 @@ try:
             for hashtag in hashtags:
                 if hashtag.lower() in row[3].lower():
                     hashtags[hashtag] += 1
-    most_retweeted = max(retweets, key=retweets.get)
-    most_favorited = max(favorites, key=favorites.get)
+    if (len(retweets) > 0):
+        most_retweeted = max(retweets, key=retweets.get)
+    if (len(favorites) > 0):
+        most_favorited = max(favorites, key=favorites.get)
 except FileNotFoundError:
     print(args.file, "not found.")
     sys.exit(1)
