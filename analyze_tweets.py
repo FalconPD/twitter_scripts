@@ -7,6 +7,8 @@ import argparse
 import datetime
 import sys
 import matplotlib.pyplot as plt
+import tweepy
+import json
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-f", "--file", help=("read tweets from FILE "
@@ -17,7 +19,7 @@ parser.add_argument("-t", "--time", help=("analzye tweets from this time "
                     default="day", choices=['hour', 'day', 'week'])
 parser.add_argument("-g", "--hashtags", help=("keep stats on these hashtags "
                                               "(default: %(default)s)"),
-                    default="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabFalcons,#There'sNoPlaceLikeOakTree,#WeAreBrookside")
+                    default="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabFalcons,#There'sNoPlaceLikeOakTree,#WeAreBrookside,#WLCares")
 parser.add_argument("-p", "--pieoutput", help=("output pie chart to PIEOUTPUT "
                                                "(default: %(default)s)"),
                     default="/home/ryan/falconPD_website/assets/pie.svg")
@@ -27,9 +29,21 @@ parser.add_argument("-m", "--template", help=("location of markdown template "
 parser.add_argument("-o", "--mdoutput", help=("output markdown to MDOUTPUT "
                                               "(default: %(default)s)"),
                     default="/home/ryan/falconPD_website/_features/04-Daily Summary.md")
+parser.add_argument("-a", "--access_tokens_file", help=("get access tokens "
+						   "from this file. "
+						   "(default: %(default)s)"),
+		    default="access_tokens.json")
 
 # Handle options stuff
 args = parser.parse_args()
+print("Getting access_tokens from:", args.access_tokens_file)
+try:
+    access_tokens_file = open(args.access_tokens_file, 'r')
+    access_tokens = json.load(access_tokens_file)
+    access_tokens_file.close()
+except:
+    print("Can't open access tokens file.")
+    sys.exit(1)
 print("Reading tweets from:", args.file)
 start_datetime = datetime.datetime.utcnow()
 print("All times are in UTC")
@@ -82,6 +96,15 @@ except FileNotFoundError:
 csvfile.close()
 
 # Generate output
+
+# Send out tweets to the most retweeted and most favorited
+auth = tweepy.OAuthHandler(access_tokens['consumer_key'], access_tokens['consumer_secret'])
+auth.set_access_token(access_tokens['access_token'], access_tokens['access_token_secret'])
+api = tweepy.API(auth)
+if (most_retweeted != "None"):
+    api.update_status("Congrats @" + most_retweeted + " for being yesterday's most retweeted falcon! http://falconpd.github.io/#Daily%20Summary")
+if (most_favorited != "None"):
+    api.update_status("Congrats @" + most_favorited + " for being yesterday's most favorited falcon! http://falconpd.github.io/#Daily%20Summary")
 
 # Make a pie chart showing the amount of tweets for each hashtag, pull out the
 # hashtags that don't have any tweets
