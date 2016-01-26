@@ -21,7 +21,7 @@ parser.add_argument("-f", "--file", help=("append tweets to FILE. If it does "
 parser.add_argument("-g", "--hashtags", help=("collect tweets with these "
 					      "hashtags (default: "
 					      "%(default)s)"),
-		    default="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabFalcons,#There'sNoPlaceLikeOakTree,#WeAreBrookside,#WLCares")
+		    default="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabFalcons,#There'sNoPlaceLikeOakTree,#WeAreBrookside,#WLCares,#BBRocks,#ApplegarthFalcons")
 parser.add_argument("-a", "--access_tokens_file", help=("get access tokens "
 						   "from this file. "
 						   "(default: %(default)s)"),

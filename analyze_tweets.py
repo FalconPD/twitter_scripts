@@ -19,7 +19,7 @@ parser.add_argument("-t", "--time", help=("analzye tweets from this time "
                     default="day", choices=['hour', 'day', 'week'])
 parser.add_argument("-g", "--hashtags", help=("keep stats on these hashtags "
                                               "(default: %(default)s)"),
-                    default="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabFalcons,#There'sNoPlaceLikeOakTree,#WeAreBrookside,#WLCares")
+                    default="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabFalcons,#There'sNoPlaceLikeOakTree,#WeAreBrookside,#WLCares,#BBRocks,#ApplegarthFalcons")
 parser.add_argument("-p", "--pieoutput", help=("output pie chart to PIEOUTPUT "
                                                "(default: %(default)s)"),
                     default="/home/ryan/falconPD_website/assets/pie.svg")
