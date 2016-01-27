@@ -8,7 +8,7 @@ cd /home/ryan/twitter_scripts
 ./analyze_tweets.py -g ${HASHTAGS}
 cd ../falconPD_website
 jekyll build
-git add "_features/04-Daily Summary.md" assets/pie.svg
+git add "_features/09-Daily Summary.md" assets/pie.svg
 git commit -m "automatic daily update"
 git push
 cd ../FalconPD.github.io
