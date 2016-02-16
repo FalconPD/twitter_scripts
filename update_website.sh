@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PATH=$PATH:/usr/local/bin
-HASHTAGS="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabFalcons,#There'sNoPlaceLikeOakTree,#WeAreBrookside,#WLCares,#BBRocks,#ApplegarthFalcons"
+HASHTAGS="#FalconPD,#MillLakeIsGreat,#GreatDayToBeAFalcon,#FabFalcons,#TheresNoPlaceLikeOakTree,#WeAreBrookside,#WLCares,#BBRocks,#ApplegarthFalcons"
 
 cd /home/ryan/twitter_scripts
 ./get_tweets.py -g ${HASHTAGS}
