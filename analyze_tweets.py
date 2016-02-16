@@ -25,10 +25,10 @@ parser.add_argument("-p", "--pieoutput", help=("output pie chart to PIEOUTPUT "
                     default="/home/ryan/falconPD_website/assets/pie.svg")
 parser.add_argument("-m", "--template", help=("location of markdown template "
                                               "default: %(default)s"),
-                    default="templates/09-Daily Summary.md.template")
+                    default="templates/04-Daily Summary.md.template")
 parser.add_argument("-o", "--mdoutput", help=("output markdown to MDOUTPUT "
                                               "(default: %(default)s)"),
-                    default="/home/ryan/falconPD_website/_features/09-Daily Summary.md")
+                    default="/home/ryan/falconPD_website/_features/04-Daily Summary.md")
 parser.add_argument("-a", "--access_tokens_file", help=("get access tokens "
 						   "from this file. "
 						   "(default: %(default)s)"),
