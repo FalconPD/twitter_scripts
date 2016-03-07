@@ -30,22 +30,9 @@ auth = tweepy.OAuthHandler(access_tokens['consumer_key'], access_tokens['consume
 auth.set_access_token(access_tokens['access_token'], access_tokens['access_token_secret'])
 api = tweepy.API(auth)
 
+for user in tweepy.Cursor(api.friends).items():
+        print(user.screen_name)
+        time.sleep(1)
 for user in tweepy.Cursor(api.followers).items():
         print(user.screen_name)
-
-"""
-csvfile = open(args.file, 'a', newline='')
-csv_output = csv.writer(csvfile, dialect='excel')
-for tweet in tweets:
-    if (tweet.user.screen_name in blacklist):
-        print("Ignoring tweet from", tweet.user.screen_name)
-    else:
-        if hasattr(tweet, 'retweeted_status'):
-            original_screen_name = stripUnicode(tweet.retweeted_status.user.screen_name)
-        else:
-            original_screen_name = ""
-        screen_name = stripUnicode(tweet.user.screen_name)
-        text = stripUnicode(tweet.text)
-        print(tweet.id, tweet.created_at, screen_name, text, tweet.favorite_count, original_screen_name) 
-        csv_output.writerow([tweet.id, tweet.created_at, screen_name, text, tweet.favorite_count, original_screen_name])
-csvfile.close() """
+        time.sleep(1)
