@@ -57,7 +57,7 @@ except:
     print("Can't open blacklist file.")
     sys.exit(1)
 
-print("Ignoring tweets from:", ", ".join(blacklist))
+# print("Ignoring tweets from:", ", ".join(blacklist))
 
 auth = tweepy.OAuthHandler(access_tokens['consumer_key'], access_tokens['consumer_secret'])
 auth.set_access_token(access_tokens['access_token'], access_tokens['access_token_secret'])
